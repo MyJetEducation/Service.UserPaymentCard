@@ -11,7 +11,7 @@ namespace Service.UserPaymentCard.Services
 
 		ValueTask<CardDto> GetAsync(Guid? userId, Guid? cardId);
 
-		ValueTask<CommonGrpcResponse> SaveAsync(Guid? userId, CardDto card);
+		ValueTask<Guid?> SaveAsync(Guid? userId, CardDto card);
 
 		ValueTask<CommonGrpcResponse> SetDefaulAsync(Guid? userId, Guid? cardId);
 	}

@@ -55,11 +55,13 @@ namespace Service.UserPaymentCard.Services
 			return cards.FirstOrDefault(dto => dto.CardId == cardId);
 		}
 
-		public async ValueTask<CommonGrpcResponse> SaveAsync(Guid? userId, CardDto card)
+		public async ValueTask<Guid?> SaveAsync(Guid? userId, CardDto card)
 		{
 			List<CardDto> cardDtos = (await GetAllAsync(userId)).ToList();
 
 			ClearDefault(cardDtos);
+
+			Guid? cardId;
 
 			CardDto existingCard = cardDtos
 				.WhereIf(card.CardId != null, dto => dto.CardId == card.CardId)
@@ -67,17 +69,26 @@ namespace Service.UserPaymentCard.Services
 				.FirstOrDefault();
 
 			if (existingCard != null)
+			{
+				cardId = existingCard.CardId;
+
 				UpdateCardDto(existingCard, card);
+			}
 			else
 			{
-				var newCard = new CardDto {CardId = card.CardId ?? Guid.NewGuid()};
+				cardId = card.CardId ?? Guid.NewGuid();
+
+				var newCard = new CardDto {CardId = cardId};
 
 				UpdateCardDto(newCard, card);
 
 				cardDtos.Add(newCard);
 			}
 
-			return await SaveDtosAsync(userId, cardDtos.ToArray());
+			CommonGrpcResponse response = await SaveDtosAsync(userId, cardDtos.ToArray());
+			return response.IsSuccess
+				? cardId
+				: await ValueTask.FromResult<Guid?>(null);
 		}
 
 		public async ValueTask<CommonGrpcResponse> SetDefaulAsync(Guid? userId, Guid? cardId)

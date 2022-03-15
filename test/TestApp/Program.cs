@@ -26,23 +26,20 @@ namespace TestApp
 			IGrpcServiceProxy<IUserPaymentCardService> serviceProxy = factory.GetUserPaymentCardService();
 			IUserPaymentCardService client = serviceProxy.Service;
 
-			var userId = new Guid("000005dc-0000-0000-dc05-000000000000");
-			var card1Id = Guid.NewGuid();
-			var card2Id = Guid.NewGuid();
+			var userId = new Guid("38bb2dde-cc03-4af5-808e-f543c3ce9b79");
 
 			Console.WriteLine($"Save Card #1 for {userId} !");
-			CommonGrpcResponse save1Response = await client.SaveCardAsync(new SaveCardGrpcRequest
+			Guid? card1Id = (await client.SaveCardAsync(new SaveCardGrpcRequest
 			{
-				CardId = card1Id,
 				Number = "1111111111111111",
 				Holder = "Holder 1",
 				Month = "01",
 				Year = "02",
 				UserId = userId,
 				Cvv = "345"
-			});
+			}))?.CardId;
 
-			if (!save1Response.IsSuccess)
+			if (card1Id == null)
 				throw new Exception("Error! Can't save Card #1");
 
 			CardsInfoGrpcResponse cards1Response = await client.GetCardNamesAsync(new GetCardsInfoGrpcRequest {UserId = userId});
@@ -53,18 +50,17 @@ namespace TestApp
 				throw new Exception("Error! Card #1 not default");
 
 			Console.WriteLine($"Save Card #2 for {userId} !");
-			CommonGrpcResponse save2Response = await client.SaveCardAsync(new SaveCardGrpcRequest
+			Guid? card2Id = (await client.SaveCardAsync(new SaveCardGrpcRequest
 			{
-				CardId = card2Id,
 				Number = "2222222222222222",
 				Holder = "Holder 2",
 				Month = "03",
 				Year = "04",
 				UserId = userId,
 				Cvv = "678"
-			});
+			}))?.CardId;
 
-			if (!save2Response.IsSuccess)
+			if (card2Id == null)
 				throw new Exception("Error! Can't save Card #2");
 
 			CardsInfoGrpcResponse cards2Response = await client.GetCardNamesAsync(new GetCardsInfoGrpcRequest {UserId = userId});

@@ -15,7 +15,7 @@ namespace Service.UserPaymentCard.Grpc
 		ValueTask<CardGrpcResponse> GetCardAsync(GetCardGrpcRequest request);
 
 		[OperationContract]
-		ValueTask<CommonGrpcResponse> SaveCardAsync(SaveCardGrpcRequest request);
+		ValueTask<SaveCardGrpcGrpcResponse> SaveCardAsync(SaveCardGrpcRequest request);
 
 		[OperationContract]
 		ValueTask<CommonGrpcResponse> SetDefaultCardAsync(SetDefaultCardGrpcRequest request);

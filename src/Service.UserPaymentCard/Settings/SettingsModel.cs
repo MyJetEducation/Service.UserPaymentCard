@@ -17,9 +17,6 @@ namespace Service.UserPaymentCard.Settings
         [YamlProperty("UserPaymentCard.ServerKeyValueServiceUrl")]
         public string ServerKeyValueServiceUrl { get; set; }
 
-        [YamlProperty("UserPaymentCard.ServiceBusReader")]
-        public string ServiceBusReader { get; set; }
-
         [YamlProperty("UserPaymentCard.KeyUserPaymentCard")]
         public string KeyUserPaymentCard { get; set; }
     }

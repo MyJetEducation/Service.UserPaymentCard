@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Service.Core.Client.Models;
@@ -43,7 +44,15 @@ namespace Service.UserPaymentCard.Services
 			return card.ToCardGrpcModel();
 		}
 
-		public async ValueTask<CommonGrpcResponse> SaveCardAsync(SaveCardGrpcRequest request) => await _dtoRepository.SaveAsync(request.UserId, request.ToDto());
+		public async ValueTask<SaveCardGrpcGrpcResponse> SaveCardAsync(SaveCardGrpcRequest request)
+		{
+			Guid? cardId = await _dtoRepository.SaveAsync(request.UserId, request.ToDto());
+
+			return new SaveCardGrpcGrpcResponse
+			{
+				CardId = cardId
+			};
+		}
 
 		public async ValueTask<CommonGrpcResponse> SetDefaultCardAsync(SetDefaultCardGrpcRequest request) => await _dtoRepository.SetDefaulAsync(request.UserId, request.CardId);
 	}
