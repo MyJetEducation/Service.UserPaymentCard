@@ -1,21 +1,10 @@
-﻿using Service.ServiceBus.Models;
-using Service.UserPaymentCard.Grpc.Models;
+﻿using Service.UserPaymentCard.Grpc.Models;
 using Service.UserPaymentCard.Models;
 
 namespace Service.UserPaymentCard.Mappers
 {
 	public static class CardMapper
 	{
-		public static CardDto ToDto(this NewPaymentServiceBusModel message) => new CardDto
-		{
-			CardId = message.CardId,
-			Number = message.Number,
-			Holder = message.Holder,
-			Month = message.Month,
-			Year = message.Year,
-			Cvv = message.Cvv
-		};
-
 		public static CardDto ToDto(this SaveCardGrpcRequest request) => new CardDto
 		{
 			CardId = request.CardId,
